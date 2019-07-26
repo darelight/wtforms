@@ -306,8 +306,8 @@ class Select(object):
         if "required" not in kwargs and "required" in getattr(field, "flags", []):
             kwargs["required"] = True
         html = ["<select %s>" % html_params(name=field.name, **kwargs)]
-        for val, label, selected in field.iter_choices():
-            html.append(self.render_option(val, label, selected))
+        for (val, label, selected), (_, item) in zip(field.iter_choices(), field._get_object_list()):
+            html.append(self.render_option(val, label, selected, **{'data-id': item.id}))
         html.append("</select>")
         return Markup("".join(html))
 
